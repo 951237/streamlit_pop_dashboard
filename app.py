@@ -114,9 +114,16 @@ def make_data(df_city):
     """
     특정 도시에 대한 남성 및 여성 인구 통계 데이터를 처리하고 결합합니다.
     """
+    # DataFrame의 구조 확인 (예시)
+    print("DataFrame shape:", df_city.shape)
+
+    # 인덱싱 범위가 적절한지 확인
+    if df_city.shape[1] < 104:
+        raise ValueError("DataFrame의 열 수가 부족합니다.")
+
     label = list(range(101))  # 나이 범위 (0-100)
-    data_man = df_city.iloc[:, 3:104].values.tolist()[0]
-    data_woman = df_city.iloc[:, 106:207].values.tolist()[0]
+    data_man = df_city.iloc[:, 3:104].values.tolist()[0] if len(df_city) > 0 else [0] * 101
+    data_woman = df_city.iloc[:, 106:207].values.tolist()[0] if len(df_city) > 0 else [0] * 101
 
     # 남성 및 여성 데이터를 DataFrame으로 결합
     combined_data = pd.DataFrame({
@@ -125,7 +132,7 @@ def make_data(df_city):
         'Female': data_woman
     })
 
-    sum_man, sum_woman = df_city.iloc[0, 1], df_city.iloc[0, 104]
+    sum_man, sum_woman = df_city.iloc[0, 1] if len(df_city) > 0 else 0, df_city.iloc[0, 104] if len(df_city) > 0 else 0
     sum_all = sum_man + sum_woman
     return combined_data, sum_man, sum_woman, sum_all
 

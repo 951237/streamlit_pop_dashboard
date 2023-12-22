@@ -91,21 +91,32 @@ def show_data(df_city):
     """
     특정 도시의 인구 통계 데이터를 표시합니다.
     """
-    data_man, data_woman, sum_man, sum_woman, sum_all = make_data(df_city)
+    combined_data, sum_man, sum_woman, sum_all = make_data(df_city)
     st.write(f"총 인구: {sum_all}, 남성: {sum_man}, 여성: {sum_woman}")
-    st.bar_chart(data_man)
-    st.bar_chart(data_woman)
+
+    # 남성 및 여성 데이터를 하나의 그래프로 시각화
+    st.bar_chart(combined_data.set_index('Age'))
+
 
 def make_data(df_city):
     """
-    특정 도시에 대한 인구 통계 데이터를 처리합니다.
+    특정 도시에 대한 남성 및 여성 인구 통계 데이터를 처리하고 결합합니다.
     """
-    label = list(range(101))
+    label = list(range(101))  # 나이 범위 (0-100)
     data_man = df_city.iloc[:, 3:104].values.tolist()[0]
     data_woman = df_city.iloc[:, 106:207].values.tolist()[0]
+
+    # 남성 및 여성 데이터를 DataFrame으로 결합
+    combined_data = pd.DataFrame({
+        'Age': label,
+        'Male': data_man,
+        'Female': data_woman
+    })
+
     sum_man, sum_woman = df_city.iloc[0, 1], df_city.iloc[0, 104]
     sum_all = sum_man + sum_woman
-    return data_man, data_woman, sum_man, sum_woman, sum_all
+    return combined_data, sum_man, sum_woman, sum_all
+
 
 if __name__ == "__main__":
     main()

@@ -5,14 +5,6 @@ import pandas as pd
 F_URL = './data/202205.csv'  # CSV 데이터 파일 경로
 YEAR, MONTH = F_URL[7:11], F_URL[11:13]  # 파일 이름에서 연도와 월 추출
 
-# 데이터를 불러오고 정리하는 함수
-def load_and_clean_data(file_path):
-    """
-    주어진 CSV 파일 경로에서 데이터를 불러오고 정리합니다.
-    """
-    df = pd.read_csv(file_path, encoding='cp949', thousands=',')
-    df = clean_df(df)
-    return df
 
 # DataFrame 정리 함수
 def clean_df(df):
@@ -22,6 +14,15 @@ def clean_df(df):
     df = replace_col_name(df)
     df['행정구역'] = df['행정구역'].apply(format_district_name)
     df = convert_columns_to_numeric(df, ['행정구역'])
+    return df
+
+# 데이터를 불러오고 정리하는 함수
+def load_and_clean_data(file_path):
+    """
+    주어진 CSV 파일 경로에서 데이터를 불러오고 정리합니다.
+    """
+    df = pd.read_csv(file_path, encoding='cp949', thousands=',')
+    df = clean_df(df)
     return df
 
 def replace_col_name(df):

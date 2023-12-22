@@ -40,10 +40,12 @@ def format_district_name(col):
     col = " ".join(col.split('(')[:-1]).strip()
     parts = col.split(" ")
 
-    # parts 리스트의 길이를 확인하고 안전하게 접근
-    if len(parts) >= 3 and parts[1][-1] == '시' and parts[2][-1] == '구':
-        col += " 전체"
+    # parts 리스트의 각 요소에 안전하게 접근하기 위한 검사
+    if len(parts) >= 3:
+        if parts[1].endswith('시') and parts[2].endswith('구'):
+            col += " 전체"
     return col
+
 
 def convert_columns_to_numeric(df, exclude_cols):
     """

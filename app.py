@@ -20,15 +20,15 @@ def clean_df(df):
     DataFrame을 정리하여 열 이름을 조직하고 지역 이름을 형식화합니다.
     """
     df = replace_col_name(df)
-    df['Administrative district'] = df['Administrative district'].apply(format_district_name)
-    df = convert_columns_to_numeric(df, ['Administrative district'])
+    df['행정구역'] = df['행정구역'].apply(format_district_name)
+    df = convert_columns_to_numeric(df, ['행정구역'])
     return df
 
 def replace_col_name(df):
     """
     불필요한 접두사를 제거하여 열 헤더를 조직합니다.
     """
-    new_col_name = [i.split('month_')[1] if 'month_' in i else i for i in df.columns]
+    new_col_name = [i.split('월_')[1] if '월_' in i else i for i in df.columns]
     df.columns = new_col_name
     return df
 
@@ -67,7 +67,7 @@ def main():
         city, df_city = input_city(city, df)
         if len(df_city) > 1:
             st.write("여러 지역이 검색되었습니다. 하나를 선택해주세요.")
-            selected = st.selectbox("지역 선택:", df_city['Administrative district'])
+            selected = st.selectbox("지역 선택:", df_city['행정구역'])
             city, df_city = input_city(selected, df)
             show_data(df_city)
         else:
@@ -77,7 +77,7 @@ def input_city(city, df):
     """
     입력된 도시 이름에 따라 DataFrame을 필터링합니다.
     """
-    city_df = df[df['Administrative district'].str.contains(city)]
+    city_df = df[df['행정구역'].str.contains(city)]
     if len(city_df) > 1:
         return city, city_df
     return city, city_df.iloc[0]

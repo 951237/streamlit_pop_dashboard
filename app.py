@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+
 
 # 파일 경로 및 데이터 처리를 위한 상수
 F_URL = './data/202205.csv'  # CSV 데이터 파일 경로
@@ -94,8 +96,18 @@ def show_data(df_city):
     combined_data, sum_man, sum_woman, sum_all = make_data(df_city)
     st.write(f"총 인구: {sum_all}, 남성: {sum_man}, 여성: {sum_woman}")
 
-    # 남성 및 여성 데이터를 하나의 그래프로 시각화
-    st.bar_chart(combined_data.set_index('Age'))
+    # 남성과 여성 데이터를 가로축에 따라 그래프로 시각화
+    fig, ax = plt.subplots()
+    ax.barh(combined_data['Age'], combined_data['Male'], color='blue', label='Male')
+    ax.barh(combined_data['Age'], -combined_data['Female'], color='pink', label='Female')
+    ax.set_xlabel('Population')
+    ax.set_ylabel('Age')
+    ax.legend()
+    ax.set_title('Population by Age and Gender')
+
+    # Streamlit에 그래프 표시
+    st.pyplot(fig)
+
 
 
 def make_data(df_city):

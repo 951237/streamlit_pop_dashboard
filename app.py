@@ -39,8 +39,8 @@ def format_district_name(col):
     """
     col = " ".join(col.split('(')[:-1]).strip()
     parts = col.split(" ")
-    if len(parts) < 3 or (parts[1][-1] == 'City' and parts[2][-1] == 'Gu'):
-        col += " all"
+    if len(parts) < 3 or (parts[1][-1] == '시' and parts[2][-1] == '구'):
+        col += " 전체"
     return col
 
 def convert_columns_to_numeric(df, exclude_cols):
